@@ -9,25 +9,14 @@
 
 Step 1. 두 방정식을 연립하고, 원통좌표계로 영역 E 찾기
 
-\begin{eqnarray*}
-    x^2 + y^2 + (z-5)^2 &=& 5^2 \\
-    z &=& \sqrt{25 - r^2} + 5 \\
-    r^2 + (r-5)^2 &=& 25 \\
-    2r^2 - 10r &=& 0 \\
-    r &=& 5
-\end{eqnarray*}
+\begin{eqnarray*} x^2 + y^2 + (z-{@A@})^2 &=& {@A@}^2 \\ z &=& \sqrt{{@A^2@} - r^2} + {@A@} \\ r^2 + (r-{@A@})^2 &=& {@A^2@} \\ 2r^2 - {@2*A@}r &=& 0 \\ r &=& {@A@} \end{eqnarray*}
 
 해당 사실을 참고하여 영역 E를 작성하면 아래와 같다.
 
-\[E  = \{ (r,\theta,z) | 0 \leq r \leq 5, 0 \leq \theta \leq 2\pi, r \leq z \leq \sqrt{25-r^2}+5 \}\]
+\[E  = \{ (r,\theta,z) | 0 \leq r \leq {@A@}, 0 \leq \theta \leq 2\pi, r \leq z \leq \sqrt{{@A^2@}-r^2}+{@A@} \}\]
 
 Step 2. 삼중적분을 계산하여 Volume의 값 얻기.
 
-\begin{eqnarray*}
-    \iiint 1 dV &=& \int_{0}^{2\pi} \int_{0}^{5} \int_{r}^{\sqrt{25-r^2}+5} r dz dr d\theta \\
-    &=& 2\pi \int_{0}^{5} r\sqrt{25-r^2} + 5r -r^2 dr \\
-    &=& 2\pi \left[ -\frac{1}{3}(25-r^2)^{\frac{3}{2}} + \frac{5}{2}r^2 - \frac{r^3}{3} \right]_{0}^{5} \\
-    &=& 125\pi
-\end{eqnarray*}
+\begin{eqnarray*} \iiint 1 dV &=& \int_{0}^{2\pi} \int_{0}^{{@A@}} \int_{r}^{\sqrt{{@A@}-r^2}+{@A@}} r dz dr d\theta \\ &=& 2\pi \int_{0}^{{@A@}} r\sqrt{{@A@}-r^2} + {@A@}r -r^2 dr \\ &=& 2\pi \left[ -\frac{1}{3}({@A@}-r^2)^{\frac{3}{2}} + \frac{{@A@}}{2}r^2 - \frac{r^3}{3} \right]_{0}^{{@A@}} \\ &=& {@A^3@}\pi \end{eqnarray*}
 
 \end{document}
