@@ -1,74 +1,75 @@
-\documentclass{article}
-\author{Jeon Yongjin}
+\documentclass[14pt]{extarticle}
+\author{Jeon Yongjin, Kim Jaeyoung, Ju Minchan}
 \usepackage{amsmath}
 \usepackage{kotex}
-\title{해설 작성을 위한 \LaTeX 필수 문법 정리}
-\date{}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry} % Reduce margins to 1 inch
+\title{\(_{Design}^{Capsonte}\) : 산업수학 프로젝트 정례 보고서}
 \begin{document}
 \maketitle
 
-텍스트 중간에 수학 공식이 필요한 경우 \( y=x^2 \)의 형태를 사용합니다. '인라인 텍 구문' 이라고 보통 불러요.
+\section{\textit{What we have done}}
 
-수학 공식이 별도의 공간을 필요로 하는 경우에는 다음과 같은 방식이 사용됩니다. \[ y=x^2 \]
+\subsection{작업 방향 설정}
 
-계산 과정을 나타내고 싶을 때는
-\[6x + 5 = 12\]
-\[6x = 7\]
-\[x = \frac{7}{6}\]
-이렇게 해도 되긴 합니다. 하지만 예쁘지가 않잖아요? (식이 제대로 정렬되어있지 않고, 일련의 식들이 연속적인 식이라는 사실이 제대로 드러나 있지 않음)
+이전 주차에 저희는 연구 주제에 익숙해지기 위해 관련 프로그램 학습 등을 진행하는 기초적인 이해 단계에 있었습니다.
+저희의 최종적인 목표는 네트워크 트래픽 최적화 알고리즘 고안입니다. 
+이를 위해서는 우선 트래픽을 분류하는 것이 우선시되어야 한다고 판단하였습니다.
+분류의 기준에는 다양한 요소가 있을 수 있겠지만, 
+우선적으로 클라이언트가 VPN을 통해 접속하는 경우와 VPN을 사용하지 않는 경우를 구분하는 것이 필요하다고 생각하였습니다.
+이러한 분류를 통해 VPN을 사용하지 않는 클라이언트의 트래픽을 우선적으로 처리할 수 있는 알고리즘을 고안할 수 있을 것입니다.
 
-\begin{eqnarray*}
-    6x + 5 &=& 12 \\
-    6x &=& 7 \\
-    x &=& \frac{7}{6}
-\end{eqnarray*}
-이게 일반적인 룰입니다. 훨씬 예쁘죠?
+\subsection{분류 모델 개발 - 데이터셋 선정 및 전처리}
+데이터셋으로는 ISCX2016을 사용하였습니다.
+이 데이터셋은 2016년 캐나다에서 수집된 트래픽 데이터로,
+실제와 유사한 네트워크 환경에서 수집된 데이터이고, 다양한 프로토콜과 패턴 사용을 포함하고 있습니다.
+또한 VPN을 사용하지 않는 클라이언트와 VPN을 사용하는 클라이언트의 트래픽을 포함하고 있기 때문에 라벨링된 데이터셋 지도학습 가능이 가능합니다.
+저희는 이 데이터셋을 사용하여 VPN을 사용하지 않는 클라이언트의 트래픽을 분류하는 모델을 개발하였습니다.
 
-인라인 텍 구문은 줄맞춤 때문에 글씨크기가 작아집니다. \( \frac{3}{2} \) eqnarray 쓸 때랑 크기가 다르다는 점에 주목해 주세요.
+ISSC2016 데이터셋에는 A1, A2, B의 3가지 시나리오가 존재하는데, 저희는 A1,A2 시나리오를 사용하였습니다.
+B 시나리오는 VPN을 사용하지 않는 클라이언트의 트래픽을 포함하고 있지 않기 때문에 저희의 연구 주제와는 맞지 않다고 판단하여 제외하였습니다.
+A2 시나리오에는 트래픽의 유형 (Browing, File Transfer, Streaming, VoIP 등)에 대한 정보가 포함되어 있기 때문에 활용하였습니다.
+각 시나리오에는 15s, 30s, 60s, 120s의 시간 간격으로 수집된 트래픽 데이터가 포함되어 있고, 각 시간별 데이터의 양이 충분하다고 판단하여 60s의 데이터만을 사용하였습니다.
 
-잘 보인다고요? \(\frac{1}{1+\frac{1}{1+\frac{1}{2}}}\) 이건 어때요?
+전처리 과정에서는 범주형 데이터(VPN/Non-VPN)를 수치형 데이터로 변환하는 작업을 진행하였습니다.
+또한 데이터의 일부가 누락되어 있고, 중복 데이터가 존재하기 때문에 그에 대한 처리 또한 진행하였습니다.
+마지막으로 IQR(Inter Quartile Range) 기법을 사용하여 이상치를 제거하였습니다. Figure 1에 전처리가 완료된 데이터의 크기 변화를 나타내었습니다.
 
-이럴 때 사용하는 명령이 displaystyle입니다. \( \displaystyle \frac{1}{2} \) 아까보다 훨씬 보기 좋죠?
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Photo_Preprocessing} % 이미지 파일 이름
+    \caption{전처리 결과}
+\end{figure}
 
-저는 그냥 인라인텍 구문마다 습관적으로 넣고 있긴 합니다. 분수에서만 쓰냐 하면 그거도 아니거든요. \(\displaystyle \int_{\frac{1}{3}}^{\frac{2}{3}} 6x+3 dx\) 이거랑 \(\int_{\frac{1}{3}}^{\frac{2}{3}} 6x + 3 dx\) 에 뭐 이런 느낌...
+\subsection{분류 모델 개발 - 모델 학습}
 
-특수문자같은 것들은, LaTeX Extension의 SNIPPET VIEW 기능을 적극 활용해 보세요. 정말 편합니다.
-\(\alpha \psi E \lim_{x \to \infty} \prod \bigodot \gcd \subset \)
+모델 학습은 상관관계 분석과 xgboost를 사용하였습니다.
+우선, 상관관계 분석을 통해 각 라벨과 VPN 사용 여부와의 상관관계를 분석하였습니다.
+각 Heatmap으로 상관관계 분석을 통해 VPN 사용 여부와 상관관계가 어느 정도 존재하는 Label만을 남겼습니다.
+상관관계 분석을 통해 남긴 Label과 그것의 Heatmap을 Figure 2에 나타내었습니다.
 
-우리는 미적분학 과목의 해설을 쓰는 게 주 업무다 보니, 적분 코드 쓸 일이 상당히 많아요.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Photo_Heatmap}
+    \caption{상관관계 분석 결과}
+\end{figure}
 
-일전에 해설 시연 때 중간에 보여드렸던 코드를 다시 가져오겠습니다. 이거 참고하시면 에지간한 적분문제 해설 쓰는 데는 지장 없을 겁니다.
+xgboost는 gradient boosting 알고리즘을 사용하여 트리 기반 모델을 학습하는 방법으로, 대량의 데이터셋을 처리하는 데에 강점을 가지고 있습니다.
+또한, xgboost는 다양한 하이퍼파라미터를 조정할 수 있기 때문에 모델의 성능을 높일 수 있는 가능성이 높습니다.
+저희는 xgboost 모델을 사용하여 VPN을 사용하지 않는 클라이언트의 트래픽을 분류하는 모델을 학습하였습니다.
+Figure 3는 학습 결과를 나타내고 있습니다. Model의 Accuracy는 0.94로 충분히 높은 성능을 보였습니다.
 
-\begin{eqnarray*}
-    \iiint 1 dV &=& \int_{0}^{2\pi} \int_{0}^{5} \int_{r}^{\sqrt{25-r^2}+5} r dz dr d\theta \\
-    &=& 2\pi \int_{0}^{5} r\sqrt{25-r^2} + 5r -r^2 dr \\
-    &=& 2\pi \left[ -\frac{1}{3}(25-r^2)^{\frac{3}{2}} + \frac{5}{2}r^2 - \frac{r^3}{3} \right]_{0}^{5} \\
-    &=& 125\pi
-\end{eqnarray*}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Photo_Result} % 이미지 파일 이름
+    \caption{모델 학습 결과}
+\end{figure}
 
-eqnarray 쓰니까 되게 이쁘게 정렬되는 거 보이시죠?
-
-이제 자주 쓰게 되실 기능이 eqnarray랑 left right일 거에요. eqnarray는 뭐 방금 했으니까 됐고...
-left right는 괄호의 크기를 괄호 안의 수식의 크기에 맞게 크기를 조정해 주는 기능입니다.
-    
-\[ 2\pi [-\frac{1}{3}(25-r^2)^{\frac{3}{2}} + \frac{5}{2}r^2 - \frac{r^3}{3}]_{0}^{5} \]
-\[ 2\pi \left[ -\frac{1}{3}(25-r^2)^{\frac{3}{2}} + \frac{5}{2}r^2 - \frac{r^3}{3} \right]_{0}^{5} \]
-
-비교해 보세요. 뭔지 아시겠죠?
-left right는 꼭 짝이 맞아야 한다는 점을 참고하세요.
-
-\[
-f(x) =
-\begin{cases} 
-x^2 & \text{if } x \geq 0, \\
--x  & \text{if } x < 0.
-\end{cases}
-\]
-
-이거도 종종 씁니다. 참고하세요.
-
-아 그리고! 함수 이름 쓸 때 어지간하면 냅다 텍스트로 쓰지 말고 명령어를 쳐 주세요.
-
-\(cos(x) \cos(x)\) 보시면 폰트가 다른 걸 확인하실 수 있습니다. 엄밀히 하면 앞의 cos는 c * o * s라서..ㅋㅋㅋ 사소한 차이지만..은근 중요해요.
+\section{\textit{What we will do}}
+이제 본격적으로 저희의 연구 주제인 네트워크 트래픽 최적화 알고리즘을 고안하는 단계에 들어가고자 합니다.
+개발한 분류 모델을 직접적으로 활용할 수 있는, VPN을 사용하지 않는 클라이언트의 트래픽을 우선적으로 처리하는 알고리즘을 고안해 볼 수 있을 것입니다.
+이것 말고도 로드 밸런싱 알고리즘을 고안해 볼 수 있을 것입니다.
+로드 밸런싱 알고리즘은 네트워크 트래픽을 여러 서버에 분산시켜서 서버의 부하를 줄이고, 네트워크 성능을 향상시키는 방법입니다.
+이미 존재하는 다양한 로드 벨런싱 알고리즘을 분석하고, 저희의 연구 주제에 맞게 개선할 수 있는 방법을 찾아볼 수 있을 것입니다.
 
 \end{document}
